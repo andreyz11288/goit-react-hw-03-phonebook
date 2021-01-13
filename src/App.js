@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import s from './App.module.css';
 import Contacts from './component/Contacts/Contacts';
@@ -11,6 +11,20 @@ export default class App extends Component {
     contacts: [],
     filter: '',
   };
+
+  componentDidMount() {
+    const localStorageGetItem = localStorage.getItem('contacts');
+    if (localStorageGetItem) {
+      this.setState({ contacts: JSON.parse(localStorageGetItem) });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts === prevState.contacts) {
+      return;
+    }
+    localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+  }
 
   phonebookValue = (text, number) => {
     const { contacts } = this.state;
